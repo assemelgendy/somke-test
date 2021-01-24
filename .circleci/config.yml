@@ -17,7 +17,7 @@ jobs:
           name: check
           command: |
               apk --no-cache add curl
-              if curl -s --head "https://google.com" 
+              if curl -s --head "https://google333.com" 
               then
                 echo "It worked!"
               else
