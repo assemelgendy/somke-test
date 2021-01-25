@@ -6,26 +6,35 @@ orbs:
   # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
+commands:
+  destroy_environments:
+    steps:
+      - run:
+          name: Destroy environment
+          command: |
+            aws cloudformation delete-stack --stackname prod-${CIRCLE_WORKFLOW_ID}
 
 jobs:
-  smoke_test:
+  create_infrastructure:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
-          name: check
+          name: Ensure backend infrastructure exist
           command: |
-              apk --no-cache add curl
-              if curl -s --head "https://google333.com" 
-              then
-                echo "It worked!"
-              else
-                echo "It failed"
-              fi
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name my-stack
+      - run:
+          name: simulate error
+          command: |
+            retuen 1
+      - destroy_environments 
+        when: on_fail
 
 
 workflows:
   my_workflow:
     jobs:
-      - smoke_test
+      - create_infrastructure
