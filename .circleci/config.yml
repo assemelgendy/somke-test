@@ -26,12 +26,12 @@ jobs:
             aws cloudformation deploy \
               --template-file template.yml \
               --stack-name my-stack
- #     - run:
-  #        name: simulate error
-   #       command: |
-    #        retuen 1
-     # - destroy_environments 
-      #  when: on_fail
+      - run:
+          name: simulate error
+          command: |
+            retuen 1
+      - destroy_environments 
+        when: on_fail
 
 
 workflows:
