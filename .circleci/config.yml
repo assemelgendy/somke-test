@@ -27,7 +27,9 @@ jobs:
               --template-file template.yml \
               --stack-name my-stack
       - run: return 1
-      - destroy_environment
+      - run: destroy
+        command: |
+          destroy_environment
         when: on_fail
 
 
